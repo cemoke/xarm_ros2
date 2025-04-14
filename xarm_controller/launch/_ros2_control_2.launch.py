@@ -7,18 +7,21 @@
 # Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
 
 import os
-import sys
 import yaml
 from ament_index_python import get_package_share_directory
 from launch.launch_description_sources import load_python_launch_file_as_module
 from launch import LaunchDescription
-from launch.actions import OpaqueFunction, DeclareLaunchArgument
+from launch.actions import OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
+    robot_ip = LaunchConfiguration('robot_ip', default='')
+    report_type = LaunchConfiguration('report_type', default='normal')
+    baud_checkset = LaunchConfiguration('baud_checkset', default=True)
+    default_gripper_baud = LaunchConfiguration('default_gripper_baud', default=2000000)
     prefix = LaunchConfiguration('prefix', default='')
     hw_ns = LaunchConfiguration('hw_ns', default='xarm')
     limited = LaunchConfiguration('limited', default=False)
@@ -30,7 +33,6 @@ def launch_setup(context, *args, **kwargs):
     dof = LaunchConfiguration('dof', default=7)
     robot_type = LaunchConfiguration('robot_type', default='xarm')
     ros2_control_plugin = LaunchConfiguration('ros2_control_plugin', default='uf_robot_hardware/UFRobotSystemHardware')
-    joint_states_remapping = LaunchConfiguration('joint_states_remapping', default='joint_states')
     xacro_file = LaunchConfiguration('xacro_file', default=PathJoinSubstitution([FindPackageShare('xarm_description'), 'urdf', 'xarm_device.urdf.xacro']))
 
     add_realsense_d435i = LaunchConfiguration('add_realsense_d435i', default=False)
@@ -55,7 +57,23 @@ def launch_setup(context, *args, **kwargs):
     geometry_mesh_tcp_rpy = LaunchConfiguration('geometry_mesh_tcp_rpy', default='"0 0 0"')
 
     kinematics_suffix = LaunchConfiguration('kinematics_suffix', default='')
+    
     robot_description = LaunchConfiguration('robot_description', default='')
+    ros2_control_params = LaunchConfiguration('ros2_control_params', default='')
+
+    if not ros2_control_params.perform(context):
+        # ros2 control params
+        # xarm_controller/launch/lib/robot_controller_lib.py
+        mod = load_python_launch_file_as_module(os.path.join(get_package_share_directory('xarm_controller'), 'launch', 'lib', 'robot_controller_lib.py'))
+        generate_ros2_control_params_temp_file = getattr(mod, 'generate_ros2_control_params_temp_file')
+        ros2_control_params = generate_ros2_control_params_temp_file(
+            os.path.join(get_package_share_directory('xarm_controller'), 'config', '{}{}_controllers.yaml'.format(robot_type.perform(context), dof.perform(context) if robot_type.perform(context) in ('xarm', 'lite') else '')),
+            prefix=prefix.perform(context), 
+            add_gripper=add_gripper.perform(context) in ('True', 'true'),
+            add_bio_gripper=add_bio_gripper.perform(context) in ('True', 'true'),
+            ros_namespace=LaunchConfiguration('ros_namespace', default='').perform(context),
+            robot_type=robot_type.perform(context)
+        )
 
     if not robot_description.perform(context):
         # robot_description
@@ -77,6 +95,7 @@ def launch_setup(context, *args, **kwargs):
                     'dof': dof,
                     'robot_type': robot_type,
                     'ros2_control_plugin': ros2_control_plugin,
+                    'ros2_control_params': ros2_control_params,
                     'add_realsense_d435i': add_realsense_d435i,
                     'add_d435i_links': add_d435i_links,
                     'model1300': model1300,
@@ -97,26 +116,91 @@ def launch_setup(context, *args, **kwargs):
                     'geometry_mesh_tcp_xyz': geometry_mesh_tcp_xyz,
                     'geometry_mesh_tcp_rpy': geometry_mesh_tcp_rpy,
                     'kinematics_suffix': kinematics_suffix,
+                    'robot_ip': robot_ip,
+                    'report_type': report_type,
+                    'baud_checkset': baud_checkset,
+                    'default_gripper_baud': default_gripper_baud,
                 }
             )
         }
     else:
         robot_description = yaml.load(robot_description.perform(context), Loader=yaml.FullLoader)
 
-    # robot state publisher node
-    robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
+    mod = load_python_launch_file_as_module(os.path.join(get_package_share_directory('xarm_api'), 'launch', 'lib', 'robot_api_lib.py'))
+    generate_robot_api_params = getattr(mod, 'generate_robot_api_params')
+    robot_params = generate_robot_api_params(
+        os.path.join(get_package_share_directory('xarm_api'), 'config', 'xarm_params.yaml'),
+        os.path.join(get_package_share_directory('xarm_api'), 'config', 'xarm_user_params.yaml'),
+        LaunchConfiguration('ros_namespace', default='').perform(context), node_name='ufactory_driver'
+    )
+
+    # ros2 control node
+    ros2_control_node = Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        parameters=[
+            robot_description,
+            ros2_control_params,
+            robot_params,
+        ],
         output='screen',
-        parameters=[robot_description],
         remappings=[
-            # ('joint_states', joint_states_remapping),
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static'),
+            ('cartesian_motion_controller/target_frame', 'target_frame'),
+            ('cartesian_compliance_controller/target_frame', 'target_frame'),
+            ('cartesian_compliance_controller/target_wrench', 'target_wrench'),
+            ('cartesian_compliance_controller/ft_sensor_wrench', 'bus0/ft_sensor0/ft_sensor_readings/wrench'),
+            ('end_effector_controller/target_frame', 'target_frame'),
+            ('end_effector_controller/target_wrench', 'target_wrench'),
+            ('end_effector_controller/ft_sensor_wrench', 'bus0/ft_sensor0/ft_sensor_readings/wrench'),
+            ('motion_control_handle/target_frame', 'target_frame'),
         ]
     )
+
+    # xarm_control_node = Node(
+    #     package="xarm_controller",
+    #     executable="xarm_ros2_control_node",
+    #     parameters=[
+    #         robot_description,
+    #         ros2_control_params,
+    #         robot_params,
+    #     ],
+    #     output="screen",
+
+
+    # )
+
+    #LOADING CONTROLLERS
+    spawner="spawner"
+    cartesian_compliance_controller_spawner = Node(
+        package="controller_manager",
+        executable=spawner,
+        arguments=["cartesian_compliance_controller", "-c", "/controller_manager"],
+    )
+    spawner="spawner"
+
+    cartesian_motion_controller_spawner = Node(
+        package="controller_manager",
+        executable=spawner,
+        arguments=["cartesian_motion_controller","--inactive", "-c", "/controller_manager"],
+
+    )
+    motion_control_handle_spawner = Node(
+        package="controller_manager",
+        executable=spawner,
+        arguments=["motion_control_handle", "-c", "/controller_manager"],
+    )
+    end_effector_controller_spawner = Node(
+        package="controller_manager",
+        executable=spawner,
+        arguments=["end_effector_controller","--inactive",  "-c", "/controller_manager"],
+    )
     return [
-        robot_state_publisher_node
+        ros2_control_node,
+        # xarm_control_node,
+        cartesian_motion_controller_spawner,
+        motion_control_handle_spawner,
+        cartesian_compliance_controller_spawner,
+        end_effector_controller_spawner,
     ]
 
 

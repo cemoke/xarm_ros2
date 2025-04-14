@@ -210,11 +210,55 @@
       <dynamics damping="1.0" friction="1.0"/>
     </joint>
 
-    <!-- <link name="${prefix}link_eef" />
-    <joint name="${prefix}joint_eef" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+    <link name="${prefix}link_end" />
+    <joint name="${prefix}joint_end" type="fixed">
+      <origin xyz="0 0 0" rpy="${pi} 0 ${pi/2}" />
       <parent link="${prefix}link6" />
-      <child link="${prefix}link_eef" />
-    </joint> -->
+      <child link="${prefix}link_end" />
+    </joint>
+
+    <!-- force sensor urdf -->
+    <xacro:include filename="$(find rokubimini_description)/urdf/BFT_SENS_ECAT_M8.urdf.xacro" />
+
+    <xacro:BFT_SENS_ECAT_M8 prefix="ft_sensor0" />
+
+    <joint name="bota_ft_sensor" type="fixed">
+    <parent link="${prefix}link_end"/>
+    <child link = "ft_sensor0_mounting" />
+    <origin xyz="0.0 0.0 0.0" rpy="${pi} 0.0 ${pi/2}" />
+    </joint>
+
+    <link name="probe_base">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value="0.0"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <xacro:common_link_visual 
+        mesh_filename="lite6/visual/punta_robot"  
+        origin_xyz="0 0 0.01" 
+        origin_rpy="0 0 0"
+        material_name="${prefix}Silver" />
+    <xacro:common_link_collision 
+        mesh_filename="lite6/collision/punta_robot"  
+        origin_xyz="0 0 0.01" 
+        origin_rpy="0 0 0" />
+    </link>
+    <joint name="base_tool" type="fixed">
+    <parent link="ft_sensor0_wrench" />
+    <child link = "probe_base" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link
+      name="probe">
+    </link>
+
+    <joint name="tip_tool" type="fixed">
+    <parent link="ft_sensor0_wrench" />
+    <child link = "probe" />
+    
+    <origin xyz="0.0 0.0 0.0625" rpy="0.0 0.0 0.0" />
+    </joint>
   </xacro:macro>
 </robot>

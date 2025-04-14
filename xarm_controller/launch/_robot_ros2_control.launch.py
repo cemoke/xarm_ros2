@@ -118,7 +118,7 @@ def launch_setup(context, *args, **kwargs):
     # ros2 control launch
     # xarm_controller/launch/_ros2_control.launch.py
     ros2_control_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(PathJoinSubstitution([FindPackageShare('xarm_controller'), 'launch', '_ros2_control.launch.py'])),
+        PythonLaunchDescriptionSource(PathJoinSubstitution([FindPackageShare('xarm_controller'), 'launch', '_ros2_control_2.launch.py'])),
         launch_arguments={
             'robot_description': robot_description,
         }.items(),
