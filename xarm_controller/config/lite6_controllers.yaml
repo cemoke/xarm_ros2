@@ -136,12 +136,12 @@ cartesian_compliance_controller:
         #- velocity
 
     stiffness:  # w.r.t. compliance_ref_link coordinates
-        trans_x: 500.0
-        trans_y: 500.0
+        trans_x: 800.0
+        trans_y: 800.0
         trans_z: 2.0
-        rot_x: 40.0
-        rot_y: 40.0
-        rot_z: 40.0
+        rot_x: 50.0
+        rot_y: 50.0
+        rot_z: 50.0
 
     solver:
         error_scale: 0.5

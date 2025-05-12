@@ -174,14 +174,14 @@ def launch_setup(context, *args, **kwargs):
     cartesian_compliance_controller_spawner = Node(
         package="controller_manager",
         executable=spawner,
-        arguments=["cartesian_compliance_controller", "-c", "/controller_manager"],
+        arguments=["cartesian_compliance_controller","--inactive", "-c", "/controller_manager"],
     )
     spawner="spawner"
 
     cartesian_motion_controller_spawner = Node(
         package="controller_manager",
         executable=spawner,
-        arguments=["cartesian_motion_controller","--inactive", "-c", "/controller_manager"],
+        arguments=["cartesian_motion_controller", "-c", "/controller_manager"],
 
     )
     motion_control_handle_spawner = Node(
