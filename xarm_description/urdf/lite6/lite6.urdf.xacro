@@ -261,10 +261,42 @@
     <origin xyz="0.0 0.0 0.0625" rpy="0.0 0.0 0.0" />
     </joint>
 
+    <!-- camera 405 -->
+    <!-- <joint name="camera_mounting" type="fixed"> -->
+    <!-- <parent link="ft_sensor0_mech3"/> -->
+    <!-- <child link = "mounting" /> -->
+    <!--   <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/> -->
+    <!-- </joint> -->
+    <!---->
+    <!-- <link name="mounting"> -->
+    <!--   <inertial> -->
+    <!--     <origin xyz="0 0 0" rpy="0 0 0"/> -->
+    <!--     <mass value="0.0"/> -->
+    <!--     <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/> -->
+    <!--   </inertial> -->
+    <!--   <xacro:common_link_visual  -->
+    <!--     mesh_filename="lite6/visual/mounting"   -->
+    <!--     origin_xyz="0 0 0"  -->
+    <!--     origin_rpy="0 0 0" -->
+    <!--     material_name="${prefix}White" /> -->
+    <!--   <xacro:common_link_collision  -->
+    <!--     mesh_filename="lite6/collision/mounting"   -->
+    <!--     origin_xyz="0 0 0"  -->
+    <!--     origin_rpy="0 0 0" /> -->
+    <!-- </link> -->
+    <!---->
+    <!-- <xacro:arg name="use_nominal_extrinsics" default="false"/> -->
+    <!-- <xacro:include filename="$(find realsense2_description)/urdf/_d405.urdf.xacro" /> -->
+    <!---->
+    <!-- <xacro:sensor_d405 parent="mounting" use_nominal_extrinsics="$(arg use_nominal_extrinsics)"> -->
+    <!--  <origin xyz="-0.0005 0.0 0.007" rpy="0 0 0"/> -->
+    <!-- </xacro:sensor_d405> -->
+    
+    <!-- 415 camera -->
     <joint name="camera_mounting" type="fixed">
     <parent link="ft_sensor0_mech3"/>
     <child link = "mounting" />
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi}"/>
     </joint>
       
     <link name="mounting">
@@ -274,28 +306,20 @@
         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
       </inertial>
       <xacro:common_link_visual 
-        mesh_filename="lite6/visual/mounting"  
+        mesh_filename="lite6/visual/d415_holder"  
         origin_xyz="0 0 0" 
         origin_rpy="0 0 0"
         material_name="${prefix}White" />
       <xacro:common_link_collision 
-        mesh_filename="lite6/collision/mounting"  
+        mesh_filename="lite6/collision/d415_holder"  
         origin_xyz="0 0 0" 
         origin_rpy="0 0 0" />
     </link>
-
-    <!-- <joint name="realsense_joint" type="fixed"> -->
-    <!--   <parent link="mounting" /> -->
-    <!--   <child link = "camera_bottom_screw_frame" /> -->
-    <!--   <origin xyz="" rpy="0.0 0.0 0.0" /> -->
-    <!-- </joint> -->
-
-    <!-- camera urdf -->
     <xacro:arg name="use_nominal_extrinsics" default="false"/>
-    <xacro:include filename="$(find realsense2_description)/urdf/_d405.urdf.xacro" />
+    <xacro:include filename="$(find realsense2_description)/urdf/_d415.urdf.xacro" />
     
-    <xacro:sensor_d405 parent="mounting" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
-      <origin xyz="-0.0005 0.0 0.007" rpy="0 0 0"/>
-    </xacro:sensor_d405>
+    <xacro:sensor_d415 parent="mounting" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+      <origin xyz="0.0 -0.001 0.0105" rpy="0 0 -${pi /2}"/>
+    </xacro:sensor_d415>
   </xacro:macro>
 </robot>
