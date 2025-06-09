@@ -11,8 +11,10 @@ Panels:
         - /Pose1
         - /TF1/Frames1
         - /PointCloud21
+        - /PoseArray1
+        - /Axes1
       Splitter Ratio: 0.6388888955116272
-    Tree Height: 748
+    Tree Height: 920
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -33,7 +35,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.029999999329447746
         Value: Lines
@@ -46,7 +48,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
@@ -65,6 +67,15 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        camera_bottom_screw_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         ft_sensor0_imu:
           Alpha: 1
           Show Axes: false
@@ -133,11 +144,16 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        mounting:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         probe:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        probe_base:
+        tool_holder:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -184,82 +200,22 @@ Visualization Manager:
         Value: /target_frame
       Value: true
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        ft_sensor0_imu:
-          Value: true
-        ft_sensor0_mech1:
-          Value: true
-        ft_sensor0_mech2:
-          Value: true
-        ft_sensor0_mech3:
-          Value: true
-        ft_sensor0_mounting:
-          Value: true
-        ft_sensor0_wrench:
-          Value: true
-        link1:
-          Value: true
-        link2:
-          Value: true
-        link3:
-          Value: true
-        link4:
-          Value: true
-        link5:
-          Value: true
-        link6:
-          Value: true
-        link_base:
-          Value: true
-        link_eef:
-          Value: true
-        link_end:
-          Value: true
-        probe:
-          Value: true
-        probe_base:
-          Value: true
-        world:
-          Value: true
       Marker Scale: 0.10000000149011612
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        world:
-          link_base:
-            link1:
-              link2:
-                link3:
-                  link4:
-                    link5:
-                      link6:
-                        link_eef:
-                          {}
-                        link_end:
-                          ft_sensor0_mounting:
-                            ft_sensor0_imu:
-                              {}
-                            ft_sensor0_mech1:
-                              {}
-                            ft_sensor0_mech2:
-                              {}
-                            ft_sensor0_mech3:
-                              {}
-                            ft_sensor0_wrench:
-                              probe:
-                                {}
-                              probe_base:
-                                {}
+        {}
       Update Interval: 0
-      Value: true
-    - Alpha: 1
+      Value: false
+    - Alpha: 0.10000000149011612
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
         Max Value: 10
@@ -280,21 +236,61 @@ Visualization Manager:
       Name: PointCloud2
       Position Transformer: XYZ
       Selectable: true
-      Size (Pixels): 3
+      Size (Pixels): 5
       Size (m): 0.0010000000474974513
-      Style: Flat Squares
+      Style: Points
       Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /estimated_stiffness_pc
+        Value: /transformed_pointcloud
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /VectorFieldX
+      Value: true
+    - Alpha: 1
+      Arrow Length: 0.30000001192092896
+      Axes Length: 0.004999999888241291
+      Axes Radius: 0.0020000000949949026
+      Class: rviz_default_plugins/PoseArray
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.07000000029802322
+      Head Radius: 0.029999999329447746
+      Name: PoseArray
+      Shaft Length: 0.23000000417232513
+      Shaft Radius: 0.009999999776482582
+      Shape: Axes
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /pose_array
+      Value: true
+    - Class: rviz_default_plugins/Axes
+      Enabled: true
+      Length: 0.05000000074505806
+      Name: Axes
+      Radius: 0.004999999888241291
+      Reference Frame: probe
+      Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 255; 255; 255
     Fixed Frame: link_base
     Frame Rate: 30
   Name: root
@@ -338,39 +334,39 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.5340383052825928
+      Distance: 0.4616261124610901
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.23000997304916382
-        Y: 0.07988356053829193
-        Z: -0.0035958904772996902
+        X: 0.3403940200805664
+        Y: 0.012737680226564407
+        Z: 0.06980616599321365
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6053981781005859
+      Pitch: 0.5303988456726074
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.7503851652145386
+      Yaw: 4.489071369171143
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1028
+  Height: 1163
   Hide Left Dock: false
-  Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000028a00000392fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000007300fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000004c00000392000000fb00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000011400000392fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000004c00000392000000d100fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000003d40000039200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Hide Right Dock: true
+  QMainWindow State: 000000ff00000000fd00000004000000000000028a0000042dfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003f0000042d000000cc00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c0000026100000001000001140000042dfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003f0000042d000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004f00000042d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: false
+    collapsed: true
   Width: 1920
   X: 0
-  Y: 26
+  Y: 0
