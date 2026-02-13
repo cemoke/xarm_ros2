@@ -19,7 +19,11 @@
       <joint name="${prefix}joint4" />
       <joint name="${prefix}joint5" />
       <joint name="${prefix}joint6" />
-      <joint name="${prefix}joint_eef" />
+      <!-- Extend to probe tip via FT sensor chain (link6 → link_end → ft_sensor0 → probe) -->
+      <joint name="${prefix}joint_end" />
+      <joint name="bota_ft_sensor" />
+      <joint name="ft_sensor0_mounting_to_wrench" />
+      <joint name="tip_tool" />
       <!-- To count in gripper TCP offset, if no need, please uncomment following 2 lines -->
       <xacro:if value="${add_gripper}">
         <joint name="${prefix}gripper_fix" />
@@ -99,5 +103,22 @@
     <disable_collisions link1="${prefix}link3" link2="${prefix}link_eef" reason="Never" />
     <disable_collisions link1="${prefix}link5" link2="${prefix}link_eef" reason="Never" />
     <disable_collisions link1="${prefix}link6" link2="${prefix}link_eef" reason="Adjacent" />
+
+    <!-- Custom tool chain: FT sensor, camera mount, camera, probe (bota + realsense) -->
+    <disable_collisions link1="${prefix}link6" link2="ft_sensor0_mounting" reason="Never" />
+    <disable_collisions link1="${prefix}link6" link2="mounting" reason="Never" />
+    <disable_collisions link1="${prefix}link6" link2="probe_base" reason="Never" />
+    <disable_collisions link1="${prefix}link_eef" link2="ft_sensor0_mounting" reason="Never" />
+    <disable_collisions link1="${prefix}link_eef" link2="mounting" reason="Never" />
+    <disable_collisions link1="${prefix}link_eef" link2="camera_link" reason="Never" />
+    <disable_collisions link1="${prefix}link5" link2="ft_sensor0_mounting" reason="Never" />
+    <disable_collisions link1="${prefix}link5" link2="mounting" reason="Never" />
+    <disable_collisions link1="ft_sensor0_mounting" link2="mounting" reason="Never" />
+    <disable_collisions link1="ft_sensor0_mounting" link2="camera_link" reason="Never" />
+    <disable_collisions link1="ft_sensor0_mounting" link2="probe_base" reason="Never" />
+    <disable_collisions link1="mounting" link2="camera_link" reason="Adjacent" />
+    <disable_collisions link1="mounting" link2="probe_base" reason="Never" />
+    <disable_collisions link1="${prefix}link_end" link2="ft_sensor0_mounting" reason="Adjacent" />
+    <disable_collisions link1="${prefix}link_end" link2="probe_base" reason="Never" />
   </xacro:macro>
 </robot>

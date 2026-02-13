@@ -26,7 +26,7 @@ XArmPlanner::XArmPlanner(const std::string& group_name)
     init(group_name);
 }
 
-void XArmPlanner::init(const std::string& group_name) 
+void XArmPlanner::init(const std::string& group_name)
 {
     is_trajectory_ = false;
     move_group_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(node_, group_name);
