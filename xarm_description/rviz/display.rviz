@@ -7,10 +7,12 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /PointCloud21
         - /Pose1
         - /PoseArray1
         - /Marker1
         - /Wrench1
+        - /Axes1
       Splitter Ratio: 0.5
     Tree Height: 927
   - Class: rviz_common/Selection
@@ -147,11 +149,16 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        peeler:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         probe:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        probe_base:
+        tool_holder:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -197,7 +204,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /simulated_pointcloud
+        Value: /transformed_pointcloud
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -286,6 +293,13 @@ Visualization Manager:
       Torque Arrow Scale: 2
       Torque Color: 204; 204; 51
       Value: true
+    - Class: rviz_default_plugins/Axes
+      Enabled: true
+      Length: 0.009999999776482582
+      Name: Axes
+      Radius: 0.004999999888241291
+      Reference Frame: probe
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -332,25 +346,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.6026627421379089
+      Distance: 1.644788146018982
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.10795063525438309
-        Y: 0.1464506983757019
-        Z: 0.13564331829547882
+        X: 0.2615627944469452
+        Y: 0.050216447561979294
+        Z: 0.22566455602645874
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.1653975546360016
+      Pitch: 0.40039753913879395
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.358593940734863
+      Yaw: 1.8267662525177002
     Saved: ~
 Window Geometry:
   Displays:
