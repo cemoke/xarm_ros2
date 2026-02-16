@@ -13,6 +13,7 @@ Panels:
         - /Marker1
         - /Wrench1
         - /Axes1
+        - /Pose2
       Splitter Ratio: 0.5
     Tree Height: 927
   - Class: rviz_common/Selection
@@ -212,7 +213,7 @@ Visualization Manager:
       Enabled: true
       Name: MarkerArray
       Namespaces:
-        {}
+        "": true
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -300,6 +301,26 @@ Visualization Manager:
       Radius: 0.004999999888241291
       Reference Frame: probe
       Value: true
+    - Alpha: 1
+      Axes Length: 0.009999999776482582
+      Axes Radius: 0.004999999888241291
+      Class: rviz_default_plugins/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: Pose
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Axes
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /target_frame
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -346,7 +367,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.644788146018982
+      Distance: 0.3261113166809082
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -361,10 +382,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.40039753913879395
+      Pitch: -0.08460228890180588
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.8267662525177002
+      Yaw: 5.069942951202393
     Saved: ~
 Window Geometry:
   Displays:

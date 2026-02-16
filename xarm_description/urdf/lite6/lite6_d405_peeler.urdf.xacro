@@ -279,7 +279,7 @@
     <joint name="probe_joint" type="fixed">
     <parent link="peeler" />
     <child link = "probe" />
-    <origin xyz="-0.05 0.0 0.0" rpy="0.0 0.0 ${-pi/2}" />
+    <origin xyz="-0.05 0.0 0.0" rpy="${pi} 0.0 ${-pi/2}" />
     </joint>
 
     <!-- D405 camera with mounting holder -->
